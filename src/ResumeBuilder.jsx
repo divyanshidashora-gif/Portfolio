@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import { saveAs } from "file-saver";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
@@ -1048,7 +1049,7 @@ function ResumeBuilder() {
         
         {/* Navigation Category Sidebar Menu */}
         <nav className="rb-editor-navigation">
-          <a href="/" className="rb-nav-logo">R</a>
+          <Link to="/" className="rb-nav-logo">R</Link>
           
           <button type="button" className={`rb-nav-item ${activeCategory === "profile" ? "active" : ""}`} onClick={() => setActiveCategory("profile")}>
             <span className="rb-nav-icon">👤</span>

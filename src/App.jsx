@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './App.css';
 
 function App() {
@@ -86,9 +87,9 @@ function App() {
           <span>Forms</span>
         </div>
 
-        <a href="/resume-builder" className="work-link">
+        <Link to="/resume-builder" className="work-link">
           Open Tool →
-        </a>
+        </Link>
       </div>
 
     </div>
