@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./TextAnalyzer.css";
 
 function TextAnalyzer() {
   const [text, setText] = useState("");
   const [copySuccess, setCopySuccess] = useState(false);
+  const textareaRef = useRef(null);
 
   // Math metrics
   const charCount = text.length;
@@ -60,37 +61,58 @@ function TextAnalyzer() {
 
   const wordFrequencies = getWordFrequency();
 
-  // Text formatting controls
+  // Text formatting controls with selection support
+  const applyTransform = (transformFn) => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+
+    if (start !== end) {
+      const selectedText = text.substring(start, end);
+      const transformed = transformFn(selectedText);
+      const newText = text.substring(0, start) + transformed + text.substring(end);
+      setText(newText);
+      
+      // Preserve selection after state update
+      setTimeout(() => {
+        textarea.focus();
+        textarea.setSelectionRange(start, start + transformed.length);
+      }, 0);
+    } else {
+      setText(transformFn(text));
+    }
+  };
+
   const handleUppercase = () => {
-    setText(text.toUpperCase());
+    applyTransform((t) => t.toUpperCase());
   };
 
   const handleLowercase = () => {
-    setText(text.toLowerCase());
+    applyTransform((t) => t.toLowerCase());
   };
 
   const handleTitleCase = () => {
-    const titleCased = text
-      .toLowerCase()
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-    setText(titleCased);
+    applyTransform((t) => 
+      t.toLowerCase()
+       .split(" ")
+       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+       .join(" ")
+    );
   };
 
   const handleSentenceCase = () => {
-    // Capitalize first letter after . or ! or ?
-    const sentenceCased = text
-      .toLowerCase()
-      .replace(/(^\s*|[.!?]\s+)([a-z])/g, (match, separator, letter) => {
-        return separator + letter.toUpperCase();
-      });
-    setText(sentenceCased);
+    applyTransform((t) => 
+      t.toLowerCase()
+       .replace(/(^\s*|[.!?]\s+)([a-z])/g, (match, separator, letter) => {
+         return separator + letter.toUpperCase();
+       })
+    );
   };
 
   const handleRemoveSpaces = () => {
-    const clean = text.replace(/\s+/g, " ").trim();
-    setText(clean);
+    applyTransform((t) => t.replace(/\s+/g, " ").trim());
   };
 
   const handleCopy = () => {
@@ -140,6 +162,7 @@ function TextAnalyzer() {
                 </div>
               </div>
               <textarea
+                ref={textareaRef}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 placeholder="Start typing or paste your content here..."
