@@ -157,6 +157,28 @@ body {
   text-transform: uppercase;
 }
 
+/* Hero Image Styling */
+.hero-image {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-image img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--accent-color);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.hero-image img:hover {
+  transform: scale(1.05);
+}
+
 .hero-section {
   background: linear-gradient(135deg, var(--light-bg) 0%, var(--light-gray) 100%);
   padding-top: 150px;
@@ -524,6 +546,21 @@ body {
   .section {
     min-height: auto;
     padding: 80px 2rem;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-section {
+    padding-top: 120px;
+  }
+
+  .hero-image {
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-image img {
+    width: 150px;
+    height: 150px;
   }
 
   .section-number {
@@ -597,4 +634,32 @@ body {
     width: 100%;
     padding: 0.9rem 1.5rem;
   }
+}
+
+.form-status {
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  margin-top: 1rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.form-status.success {
+  background-color: rgba(76, 175, 80, 0.15);
+  color: #2e7d32;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.form-status.error {
+  background-color: rgba(244, 67, 54, 0.15);
+  color: #c62828;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.form-status.submitting {
+  background-color: rgba(255, 107, 53, 0.15);
+  color: #d84315;
+  border: 1px solid rgba(255, 107, 53, 0.3);
 }

@@ -4,6 +4,44 @@ import './App.css';
 
 function App() {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState({ type: '', text: '' });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus({ type: 'submitting', text: 'Sending your message...' });
+
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/divyanshidashora@gmail.com", {
+        method: "POST",
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          message: message
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.success === "true" || response.ok) {
+        setStatus({ type: 'success', text: 'Thank you! Your message has been sent. Please check your email to activate submissions if this is the first run.' });
+        setName('');
+        setEmail('');
+        setMessage('');
+      } else {
+        setStatus({ type: 'error', text: data.message || 'Something went wrong. Please try again.' });
+      }
+    } catch (error) {
+      console.error(error);
+      setStatus({ type: 'error', text: 'Network error. Please check your connection and try again.' });
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -241,17 +279,46 @@ function App() {
             <p className="section-subtitle">Got a project? Let's build something extraordinary together</p>
             
             <div className="contact-content">
-              <form className="contact-form">
+              <form onSubmit={handleSubmit} className="contact-form">
                 <div className="form-group">
-                  <input type="text" placeholder="Your Name" required />
+                  <input 
+                    type="text" 
+                    placeholder="Your Name" 
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required 
+                  />
                 </div>
                 <div className="form-group">
-                  <input type="email" placeholder="Your Email" required />
+                  <input 
+                    type="email" 
+                    placeholder="Your Email" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required 
+                  />
                 </div>
                 <div className="form-group">
-                  <textarea placeholder="Tell me about your project" rows="5" required></textarea>
+                  <textarea 
+                    placeholder="Tell me about your project" 
+                    rows="5" 
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    required
+                  ></textarea>
                 </div>
-                <button type="submit" className="btn btn-primary btn-large">Send Message</button>
+                <button 
+                  type="submit" 
+                  className="btn btn-primary btn-large"
+                  disabled={status.type === 'submitting'}
+                >
+                  {status.type === 'submitting' ? 'Sending...' : 'Send Message'}
+                </button>
+                {status.text && (
+                  <div className={`form-status ${status.type}`}>
+                    {status.text}
+                  </div>
+                )}
               </form>
 
               <div className="contact-info">

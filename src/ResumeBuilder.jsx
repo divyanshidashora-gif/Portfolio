@@ -230,6 +230,27 @@ function ResumeBuilder() {
   const [sectionMargin, setSectionMargin] = useState(16);
   const [fontSize, setFontSize] = useState(14);
   const [scale, setScale] = useState(0.85);
+  const [mobileView, setMobileView] = useState("edit");
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        const previewScrollEl = document.querySelector(".rb-preview-scroll");
+        if (previewScrollEl) {
+          const availableWidth = previewScrollEl.clientWidth - 40;
+          const newScale = Math.min(1, Math.max(0.3, availableWidth / 794));
+          setScale(newScale);
+        } else {
+          const newScale = Math.min(1, Math.max(0.3, (window.innerWidth - 40) / 794));
+          setScale(newScale);
+        }
+      }
+    };
+    
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [mobileView]);
 
   // Premium features state & refs
   const [signatureImage, setSignatureImage] = useState(null);
@@ -1043,7 +1064,7 @@ function ResumeBuilder() {
   };
 
   return (
-    <div className="rb-dashboard">
+    <div className={`rb-dashboard rb-view-${mobileView}`}>
       {/* 1. Left Editor Workspace */}
       <div className="rb-editor-workspace">
         
@@ -2218,6 +2239,26 @@ function ResumeBuilder() {
             )}
           </div>
         </div>
+      </div>
+      
+      {/* 3. Mobile View Navigation Tabs */}
+      <div className="rb-mobile-tabs">
+        <button
+          type="button"
+          className={`rb-mobile-tab-btn ${mobileView === "edit" ? "active" : ""}`}
+          onClick={() => setMobileView("edit")}
+        >
+          <span className="rb-mobile-tab-icon">📝</span>
+          <span>Edit Details</span>
+        </button>
+        <button
+          type="button"
+          className={`rb-mobile-tab-btn ${mobileView === "preview" ? "active" : ""}`}
+          onClick={() => setMobileView("preview")}
+        >
+          <span className="rb-mobile-tab-icon">👁️</span>
+          <span>Preview PDF</span>
+        </button>
       </div>
     </div>
   );
