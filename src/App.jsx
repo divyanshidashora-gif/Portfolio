@@ -130,6 +130,28 @@ function App() {
         </Link>
       </div>
 
+      <div className="work-card fade-in-up">
+        <div className="work-image">✍️</div>
+
+        <h3>Text Analyzer</h3>
+
+        <p>
+          Analyze your text readability, density, reading time,
+          and format capitalization values in real time.
+        </p>
+        
+
+        <div className="work-tags">
+          <span>React</span>
+          <span>Analysis</span>
+          <span>Text Utility</span>
+        </div>
+
+        <Link to="/text-analyzer" className="work-link">
+          Open Tool →
+        </Link>
+      </div>
+
     </div>
   </div>
 </section>
