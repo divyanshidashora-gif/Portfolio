@@ -76,9 +76,6 @@ function App() {
       {/* Hero Section */}
       <section id="hero" className="section hero-section">
         <div className="section-number">01 / 06</div>
-        <div className="hero-image">
-  <img src="/profile.jpg" alt="Divyanshi" />
-</div>
         <div className="hero-wrapper">
           <div className="hero-content fade-in-up">
             <h1 className="hero-title">
